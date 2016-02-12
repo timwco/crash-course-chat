@@ -1,0 +1,18 @@
+<form class="forms" ng-submit="vm.createRoom(room)">
+  <row>
+    <column cols="12">
+      <label>Room Name <span class="req">*</span></label>
+      <input type="text" ng-model="room.name">
+      <br><br>
+      <select class="select-big" ng-model="room.class">
+          <option>Pick One</option>
+          <option value="fe">FE - JavaScript</option>
+          <option value="be">BE - Ruby</option>
+          <option value="de">FE - Design</option>
+          <option value="ios">Mobile - iOS</option>
+      </select>
+      <br><br>
+      <button class="btn">Create Room</button>
+    </column>
+  </row>
+</form>

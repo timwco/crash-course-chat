@@ -1,0 +1,21 @@
+<row>
+    <column cols="6">
+      <h2>Front End Engineering</h2>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ergo adhuc, quantum equidem intellego, causa non videtur fuisse mutandi nominis. Nihil minus, contraque illa hereditate dives ob eamque rem laetus. Conferam tecum, quam cuique verso rem subicias; Istam voluptatem perpetuam quis potest praestare sapienti? Egone non intellego, quid sit don Graece, Latine voluptas? Ego vero isti, inquam, permitto. Duo Reges: constructio interrete. Non autem hoc: igitur ne illud quidem. Respondent extrema primis, media utrisque, omnia omnibus.
+      </p>
+    </column>
+
+    <column cols="6" class="chat-window">
+      <ul>
+        <li ng-repeat="message in vm.messages">{{ message.$value }}</li>
+      </ul>
+
+      <form ng-submit="vm.addMessage(vm.message)" class="forms">
+        <section>
+          <input autocomplete="off" type="text" ng-model="vm.message" />
+        </section>
+      </form>
+
+    </column>
+</row>

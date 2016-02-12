@@ -1,0 +1,25 @@
+.wrapper {
+  border-top: 5px solid #233139; }
+
+header {
+  text-align: center; }
+  header img {
+    width: 125px; }
+  header h1 {
+    font-size: 15px; }
+
+.container {
+  width: 1100px;
+  margin: 100px auto; }
+
+.chat-window {
+  background-color: #d1d2d4;
+  position: relative;
+  padding-bottom: 40px; }
+  .chat-window form, .chat-window section {
+    margin-bottom: 0; }
+  .chat-window form {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0; }
