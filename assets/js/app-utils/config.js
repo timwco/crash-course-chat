@@ -6,12 +6,28 @@ let config = function($stateProvider, $urlRouterProvider) {
       templateUrl: 'templates/layout.tpl.html'
     })
 
-    .state('root.landing', {
-      url: '/',
-      controller: 'RoomController as vm',
-      templateUrl: 'templates/landing.tpl.html'
+    // Login
+    .state('root.login', {
+      url: '/login',
+      controller: 'UserController as vm',
+      templateUrl: 'templates/login.tpl.html'
     })
 
+    // Admins
+    .state('root.create', {
+      url: '/create',
+      controller: 'CreateRoomController as vm',
+      templateUrl: 'templates/create.tpl.html'
+    })
+
+    // Guests
+    .state('root.welcome', {
+      url: '/',
+      controller: 'WelcomeController as vm',
+      templateUrl: 'templates/welcome.tpl.html'
+    })
+
+    // Room
     .state('root.singleRoom', {
       url: '/room/:id',
       controller: 'RoomController as vm',

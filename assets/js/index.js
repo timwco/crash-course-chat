@@ -3,12 +3,12 @@ import 'angular-ui-router';
 import 'angularfire';
 
 // Custom Modules
-import './app-room/index';
+import './app-core/index';
 
 // Config
 import config from './app-utils/config';
 
 angular
-  .module('app', ['ui.router', 'firebase', 'app.room'])
+  .module('app', ['ui.router', 'firebase', 'app.core'])
   .config(config)
 ;

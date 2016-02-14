@@ -4,24 +4,20 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var RoomController = function RoomController($http, FireChat) {
+var CreateRoomController = function CreateRoomController($http) {
 
   var vm = this;
 
   vm.createRoom = createRoom;
-  vm.addMessage = addMessage;
 
   activate();
 
   function activate() {
-    vm.messages = FireChat.getAll;
-    console.log(vm.messages);
-  }
-
-  function addMessage(message) {
-    FireChat.create(message).then(function (res) {
-      vm.message = '';
-    });
+    setTimeout(function () {
+      var date = new Date().toISOString().substring(0, 10);
+      var field = document.querySelector('#date');
+      field.value = date;
+    }, 100);
   }
 
   function createRoom(data) {
@@ -32,10 +28,75 @@ var RoomController = function RoomController($http, FireChat) {
   }
 };
 
-RoomController.$inject = ['$http', 'FireChat'];
-exports.default = RoomController;
+CreateRoomController.$inject = ['$http'];
+exports.default = CreateRoomController;
 
 },{}],2:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var RoomController = function RoomController($http, FireChat, $stateParams) {
+
+  var vm = this;
+
+  var chat = [];
+
+  vm.addMessage = addMessage;
+
+  activate();
+
+  function activate() {
+    chat = FireChat.createChat('room-' + $stateParams.id);
+    vm.messages = FireChat.getMessages(chat);
+    console.log(vm.messages);
+  }
+
+  function addMessage(message) {
+    FireChat.addMessage(vm.messages, message).then(function (res) {
+      vm.message = '';
+    });
+  }
+};
+
+RoomController.$inject = ['$http', 'FireChat', '$stateParams'];
+exports.default = RoomController;
+
+},{}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var UserController = function UserController() {};
+
+UserController.$inject = [];
+exports.default = UserController;
+
+},{}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var WelcomeController = function WelcomeController() {
+
+  var vm = this;
+
+  vm.register = register;
+
+  activate();
+
+  function activate() {}
+
+  function register(info, roomID) {}
+};
+
+WelcomeController.$inject = [];
+exports.default = WelcomeController;
+
+},{}],5:[function(require,module,exports){
 'use strict';
 
 var _angular = require('angular');
@@ -45,6 +106,18 @@ var _angular2 = _interopRequireDefault(_angular);
 var _room = require('./controllers/room.controller');
 
 var _room2 = _interopRequireDefault(_room);
+
+var _createRoom = require('./controllers/create-room.controller');
+
+var _createRoom2 = _interopRequireDefault(_createRoom);
+
+var _user = require('./controllers/user.controller');
+
+var _user2 = _interopRequireDefault(_user);
+
+var _welcome = require('./controllers/welcome.controller');
+
+var _welcome2 = _interopRequireDefault(_welcome);
 
 var _room3 = require('./services/room.service');
 
@@ -56,9 +129,9 @@ var _firechat2 = _interopRequireDefault(_firechat);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_angular2.default.module('app.room', []).controller('RoomController', _room2.default).service('RoomService', _room4.default).service('FireChat', _firechat2.default);
+_angular2.default.module('app.core', []).controller('RoomController', _room2.default).controller('CreateRoomController', _createRoom2.default).controller('UserController', _user2.default).controller('WelcomeController', _welcome2.default).service('RoomService', _room4.default).service('FireChat', _firechat2.default);
 
-},{"./controllers/room.controller":1,"./services/firechat.service":3,"./services/room.service":4,"angular":9}],3:[function(require,module,exports){
+},{"./controllers/create-room.controller":1,"./controllers/room.controller":2,"./controllers/user.controller":3,"./controllers/welcome.controller":4,"./services/firechat.service":6,"./services/room.service":7,"angular":12}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -66,28 +139,27 @@ Object.defineProperty(exports, "__esModule", {
 });
 var FireChat = function FireChat($firebaseObject, $firebaseArray) {
 
-  var ref = new Firebase('https://crashcoursechat.firebaseio.com/messages');
-  var messages = $firebaseArray(ref);
-
-  this.getAll = messages;
-
-  this.create = function (message) {
-    return messages.$add(message);
+  this.createChat = function (name) {
+    return new Firebase('https://crashcoursechat.firebaseio.com/rooms/' + name + '/messages');
   };
 
-  this.get = function (messageId) {
-    return $firebaseObject(ref.child('messages').child(messageId)).$asObject();
+  this.getMessages = function (ref) {
+    return $firebaseArray(ref);
   };
 
-  this.delete = function (message) {
-    return messages.$remove(message);
+  this.addMessage = function (ref, message) {
+    return ref.$add(message);
   };
+
+  // this.get = (messageId) => $firebaseObject(ref.child('messages').child(messageId)).$asObject();
+  //
+  // this.delete = (message) => messages.$remove(message);
 };
 
 FireChat.$inject = ['$firebaseObject', '$firebaseArray'];
 exports.default = FireChat;
 
-},{}],4:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -101,7 +173,7 @@ var RoomService = function RoomService() {
 RoomService.$inject = [];
 exports.default = RoomService;
 
-},{}],5:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -112,11 +184,31 @@ var config = function config($stateProvider, $urlRouterProvider) {
   $stateProvider.state('root', {
     abstract: true,
     templateUrl: 'templates/layout.tpl.html'
-  }).state('root.landing', {
+  })
+
+  // Login
+  .state('root.login', {
+    url: '/login',
+    controller: 'UserController as vm',
+    templateUrl: 'templates/login.tpl.html'
+  })
+
+  // Admins
+  .state('root.create', {
+    url: '/create',
+    controller: 'CreateRoomController as vm',
+    templateUrl: 'templates/create.tpl.html'
+  })
+
+  // Guests
+  .state('root.welcome', {
     url: '/',
-    controller: 'RoomController as vm',
-    templateUrl: 'templates/landing.tpl.html'
-  }).state('root.singleRoom', {
+    controller: 'WelcomeController as vm',
+    templateUrl: 'templates/welcome.tpl.html'
+  })
+
+  // Room
+  .state('root.singleRoom', {
     url: '/room/:id',
     controller: 'RoomController as vm',
     templateUrl: 'templates/room.tpl.html'
@@ -128,7 +220,7 @@ var config = function config($stateProvider, $urlRouterProvider) {
 config.$inject = ['$stateProvider', '$urlRouterProvider'];
 exports.default = config;
 
-},{}],6:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 var _angular = require('angular');
@@ -139,7 +231,7 @@ require('angular-ui-router');
 
 require('angularfire');
 
-require('./app-room/index');
+require('./app-core/index');
 
 var _config = require('./app-utils/config');
 
@@ -150,11 +242,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Custom Modules
 
 
-_angular2.default.module('app', ['ui.router', 'firebase', 'app.room']).config(_config2.default);
+_angular2.default.module('app', ['ui.router', 'firebase', 'app.core']).config(_config2.default);
 
 // Config
 
-},{"./app-room/index":2,"./app-utils/config":5,"angular":9,"angular-ui-router":7,"angularfire":11}],7:[function(require,module,exports){
+},{"./app-core/index":5,"./app-utils/config":8,"angular":12,"angular-ui-router":10,"angularfire":14}],10:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.2.18
@@ -4694,7 +4786,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-},{}],8:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.0
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -35123,11 +35215,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],9:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":8}],10:[function(require,module,exports){
+},{"./angular":11}],13:[function(require,module,exports){
 /*!
  * AngularFire is the officially supported AngularJS binding for Firebase. Firebase
  * is a full backend so you don't need servers to build your Angular app. AngularFire
@@ -37406,8 +37498,8 @@ if ( typeof Object.getPrototypeOf !== "function" ) {
     }
 })();
 
-},{}],11:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 require('./dist/angularfire');
 module.exports = 'firebase';
 
-},{"./dist/angularfire":10}]},{},[6]);
+},{"./dist/angularfire":13}]},{},[9]);

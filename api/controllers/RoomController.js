@@ -9,8 +9,10 @@ module.exports = {
 
 	create: function (req, res) {
 		var params = {
-			name  : req.param('name'),
-			class : req.param('class')
+			name  : req.param('class') + '-' + req.param('date'),
+			date  : req.param('date'),
+			class : req.param('class'),
+			desc  : req.param('description')
 		}
 
 		Room.create(params).exec(function (err, room) {
