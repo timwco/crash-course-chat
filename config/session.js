@@ -40,13 +40,13 @@ module.exports.session = {
   // },
 
   /***************************************************************************
-  *                                                   .                       *
+  *                                                                          *
   * In production, uncomment the following lines to set up a shared redis    *
   * session store that can be shared across multiple Sails.js servers        *
   ***************************************************************************/
 
-  // adapter: 'redis',
-  // url: process.env.REDISTOGO_URL
+  adapter: 'redis',
+  url: process.env.REDISTOGO_URL
 
   /***************************************************************************
   *                                                                          *
@@ -72,10 +72,11 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  adapter: 'mongo',
-  url: 'process.env.MONGOLAB_URI',
-  collection: 'sessions',
-  stringify: false
+  // adapter: 'mongo',
+  // host: 'localhost',
+  // port: 27017,
+  // db: 'sails',
+  // collection: 'sessions',
 
   /***************************************************************************
   *                                                                          *

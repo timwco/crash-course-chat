@@ -3,6 +3,7 @@ module.exports = function(req, res, next) {
       return next();
     } else{
       console.log(req.session);
+      console.log(req.passport);
       return res.json({ authed: false });
     }
 };
