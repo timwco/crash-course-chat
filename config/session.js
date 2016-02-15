@@ -75,6 +75,7 @@ module.exports.session = {
   adapter: 'mongo',
   url: 'process.env.MONGOLAB_URI',
   collection: 'sessions',
+  stringify: false
 
   /***************************************************************************
   *                                                                          *
