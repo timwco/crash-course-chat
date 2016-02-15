@@ -37,11 +37,9 @@ module.exports.routes = {
   },
 
   // User Login / Management
-  'post /login': 'AuthController.login',
-  '/logout': 'AuthController.logout',
-
   '/auth/google':'AuthController.google',
   '/auth/google/callback':'AuthController.googleCallback',
+  'post /auth/verify':'AuthController.verify',
 
   // Room Management
   'post /room': 'RoomController.create',

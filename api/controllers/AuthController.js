@@ -14,29 +14,8 @@
          rest: false
      },
 
-     login: function(req, res) {
+     verify: function (req, res) {
 
-         passport.authenticate('local', function(err, user, info) {
-             if ((err) || (!user)) {
-                 return res.send({
-                     message: info.message,
-                     user: user
-                 });
-             }
-             req.logIn(user, function(err) {
-                 if (err) res.send(err);
-                 return res.send({
-                     message: info.message,
-                     user: user
-                 });
-             });
-
-         })(req, res);
-     },
-
-     logout: function(req, res) {
-         req.logout();
-         res.redirect('/');
      },
 
 		 google: function(req, res, next){
@@ -44,12 +23,8 @@
 		 },
 
 		 googleCallback: function(req, res, next){
-       passport.authenticate(
-         'google',
-         {
-           successRedirect: '/#/admin?yay',
-           failureRedirect: '/#/admin?boo'
-         }
-       )(req, res, next);
+       passport.authenticate('google', function (err, user, info) {
+        res.redirect('/#/admin?' + user.email);
+      })(req, res, next);
 		 }
 }
