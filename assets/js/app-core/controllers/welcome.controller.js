@@ -13,13 +13,11 @@ let WelcomeController = function($http, RoomService, $state) {
   function register(info, roomID) {
 
     RoomService.get(roomID).then( (res) => {
-      console.log(res);
 
       info.class = res.data.class;
       info.date  = res.data.date;
 
       $http.post('/register', info).then( (res) => {
-        console.log(res);
         $state.go('root.singleRoom', { id: roomID });
       });
 

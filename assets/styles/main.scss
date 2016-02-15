@@ -20,6 +20,12 @@ header {
   }
 }
 
+.course-description {
+  .text {
+    padding-top: 15px;
+  }
+}
+
 .google-login, .google-login:hover {
   background-color: #db4437;
   color: white;
@@ -67,14 +73,41 @@ header {
 
 
 .chat-window {
-  background-color: $light;
-  position: relative;
-  padding-bottom:40px;
-  form, section { margin-bottom: 0;}
-  form {
-    position: absolute;
-    width: 100%;
-    bottom:0;
-    left: 0;
+  .inner {
+    border: 1px solid $shield;
+    border-radius: 4px;
+    background-color: lighten($light, 15%);
+    position: relative;
+    padding-bottom:40px;
+    h4 {
+      background-color: $light;
+      border-radius: 4px 4px 0 0;
+      text-align: center;
+      padding: 5px 0;
+      margin: 1px;
+      color: $shield;
+    }
+    ul {
+      margin: 0;
+      padding: 15px;
+      list-style: none;
+      li {
+        padding: 0 5px;
+        &:before {
+          content: "\00bb";
+          padding-right: 8px;
+        }
+        &:nth-child(even) {
+          background-color: lighten($light, 10%);
+        }
+      }
+    }
+    form, section { margin-bottom: 0;}
+    form {
+      position: absolute;
+      width: 100%;
+      bottom:0;
+      left: 0;
+    }
   }
 }

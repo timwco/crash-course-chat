@@ -10,6 +10,9 @@ header {
   header h1 {
     font-size: 15px; }
 
+.course-description .text {
+  padding-top: 15px; }
+
 .google-login, .google-login:hover {
   background-color: #db4437;
   color: white; }
@@ -46,13 +49,33 @@ header {
   padding-left: 15px;
   color: #6fbbb7; }
 
-.chat-window {
-  background-color: #d1d2d4;
+.chat-window .inner {
+  border: 1px solid #233139;
+  border-radius: 4px;
+  background-color: #f9f9f9;
   position: relative;
   padding-bottom: 40px; }
-  .chat-window form, .chat-window section {
+  .chat-window .inner h4 {
+    background-color: #d1d2d4;
+    border-radius: 4px 4px 0 0;
+    text-align: center;
+    padding: 5px 0;
+    margin: 1px;
+    color: #233139; }
+  .chat-window .inner ul {
+    margin: 0;
+    padding: 15px;
+    list-style: none; }
+    .chat-window .inner ul li {
+      padding: 0 5px; }
+      .chat-window .inner ul li:before {
+        content: "\00bb";
+        padding-right: 8px; }
+      .chat-window .inner ul li:nth-child(even) {
+        background-color: #ebeced; }
+  .chat-window .inner form, .chat-window .inner section {
     margin-bottom: 0; }
-  .chat-window form {
+  .chat-window .inner form {
     position: absolute;
     width: 100%;
     bottom: 0;

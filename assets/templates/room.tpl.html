@@ -1,19 +1,25 @@
 <row>
-    <column cols="6">
-      <h2>Crash Course</h2>
+    <column cols="6" class="course-description">
+      <h2>{{ vm.title }} Crash Course</h2>
+      <i>{{ vm.date }}</i>
       <div class="text" ng-bind-html="vm.description"></div>
     </column>
 
     <column cols="6" class="chat-window">
-      <ul>
-        <li ng-repeat="message in vm.messages">{{ message.$value }}</li>
-      </ul>
+      <div class="inner">
+        <h4>Chat Window</h4>
 
-      <form ng-submit="vm.addMessage(vm.message)" class="forms" ng-show="vm.authed">
-        <section>
-          <input autocomplete="off" type="text" ng-model="vm.message" />
-        </section>
-      </form>
+        <ul>
+          <li ng-repeat="message in vm.messages">
+            <span ng-bind-html="message.$value | linkify"></span>
+          </li>
+        </ul>
 
+        <form ng-submit="vm.addMessage(vm.message)" class="forms" ng-show="vm.authed">
+          <section>
+            <input autocomplete="off" type="text" ng-model="vm.message" />
+          </section>
+        </form>
+      </div>
     </column>
 </row>

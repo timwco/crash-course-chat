@@ -2,6 +2,12 @@ var passport = require('passport'),
 GoogleStrategy = require('passport-google-oauth20').Strategy,
 bcrypt = require('bcrypt');
 
+if (process.env.NODE_ENV === 'development') {
+  var cbURL = 'http://localhost:5000/auth/google/callback';
+} else {
+  var cbURL = 'http://xcourse.co/auth/google/callback';
+}
+
 passport.serializeUser(function(user, done) {
     done(null, user.id);
 });
@@ -15,7 +21,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_ID,
     clientSecret: process.env.GOOGLE_SECRET,
-    callbackURL: "http://xcourse.co/auth/google/callback"
+    callbackURL: cbURL
   },
   function(accessToken, refreshToken, profile, cb) {
 

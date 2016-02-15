@@ -36,10 +36,6 @@ module.exports = {
 				room.desc = md.render(room.desc);
 	    	return res.json(room);
 	  	});
-
-		// console.log(room);
-		// room.desc = room.desc + ' is coffee Mug';
-		// return res.json(room);
 	}
 
 };

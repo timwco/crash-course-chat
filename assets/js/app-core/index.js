@@ -8,6 +8,8 @@ import RoomService from './services/room.service';
 import FireChat from './services/firechat.service';
 import AuthService from './services/auth.service';
 
+import linkifyFilter from './filters/linkify.filter';
+
 angular
   .module('app.core', [])
   .controller('RoomController', RoomController)
@@ -16,4 +18,5 @@ angular
   .service('RoomService', RoomService)
   .service('FireChat', FireChat)
   .service('AuthService', AuthService)
+  .filter('linkify', linkifyFilter)
 ;

@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 let RoomController = function(AuthService, RoomService, FireChat, $stateParams, $sce) {
 
   let vm = this;
@@ -15,12 +17,17 @@ let RoomController = function(AuthService, RoomService, FireChat, $stateParams, 
     });
 
     RoomService.get($stateParams.id).then( (res) => {
-      console.log(res);
-      vm.room = res.data;
+
+      // Set Room Description & Details
+      vm.date = moment(res.data.date).format('MMMM, Do YYYY');
       vm.description = $sce.trustAsHtml(res.data.desc);
 
+      // Create Chat Connection
       chat = FireChat.createChat('room-' + res.data.id);
       vm.messages = FireChat.getMessages(chat);
+
+      // Set Room Title
+      vm.title = RoomService.key(res.data.class);
 
     });
   }
