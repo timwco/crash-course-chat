@@ -42,7 +42,7 @@ exports.default = AdminController;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var RoomController = function RoomController(AuthService, FireChat, $stateParams) {
+var RoomController = function RoomController(AuthService, RoomService, FireChat, $stateParams, $sce) {
 
   var vm = this;
 
@@ -60,6 +60,12 @@ var RoomController = function RoomController(AuthService, FireChat, $stateParams
 
     chat = FireChat.createChat('room-' + $stateParams.id);
     vm.messages = FireChat.getMessages(chat);
+
+    RoomService.get($stateParams.id).then(function (res) {
+      console.log(res);
+      vm.room = res.data;
+      vm.description = $sce.trustAsHtml(res.data.desc);
+    });
   }
 
   function addMessage(message) {
@@ -69,7 +75,7 @@ var RoomController = function RoomController(AuthService, FireChat, $stateParams
   }
 };
 
-RoomController.$inject = ['AuthService', 'FireChat', '$stateParams'];
+RoomController.$inject = ['AuthService', 'RoomService', 'FireChat', '$stateParams', '$sce'];
 exports.default = RoomController;
 
 },{}],3:[function(require,module,exports){
@@ -187,6 +193,10 @@ var RoomService = function RoomService($http) {
 
   this.create = function (data) {
     return $http.post('/room', data);
+  };
+
+  this.get = function (id) {
+    return $http.get('/room/' + id);
   };
 };
 

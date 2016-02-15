@@ -1,4 +1,4 @@
-let RoomController = function(AuthService, FireChat, $stateParams) {
+let RoomController = function(AuthService, RoomService, FireChat, $stateParams, $sce) {
 
   let vm = this;
 
@@ -16,6 +16,12 @@ let RoomController = function(AuthService, FireChat, $stateParams) {
 
     chat = FireChat.createChat('room-' + $stateParams.id);
     vm.messages = FireChat.getMessages(chat);
+
+    RoomService.get($stateParams.id).then( (res) => {
+      console.log(res);
+      vm.room = res.data;
+      vm.description = $sce.trustAsHtml(res.data.desc);
+    });
   }
 
   function addMessage(message) {
@@ -26,5 +32,5 @@ let RoomController = function(AuthService, FireChat, $stateParams) {
 
 };
 
-RoomController.$inject = ['AuthService', 'FireChat', '$stateParams'];
+RoomController.$inject = ['AuthService', 'RoomService', 'FireChat', '$stateParams', '$sce'];
 export default RoomController;

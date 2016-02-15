@@ -5,6 +5,9 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+var MarkdownIt = require('markdown-it'),
+    md = new MarkdownIt();
+
 module.exports = {
 
 	create: function (req, res) {
@@ -24,13 +27,19 @@ module.exports = {
 			});
 		});
 
-
-
 	},
 
 	single: function (req, res) {
-		var room = Room.find({ id: req.params('id') });
-		return res.json(room);
+		Room
+			.findOne({ roomID: req.param('id') })
+			.exec(function(err, room) {
+				room.desc = md.render(room.desc);
+	    	return res.json(room);
+	  	});
+
+		// console.log(room);
+		// room.desc = room.desc + ' is coffee Mug';
+		// return res.json(room);
 	}
 
 };

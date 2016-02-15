@@ -16,6 +16,17 @@ module.exports = {
       type: "string",
       required: true
     },
+    roomID: {
+      type: "integer",
+      required: true
+    },
+    desc: {
+      type: "text"
+    },
+    date: {
+      type: "date",
+      required: true
+    },
     toJSON: function() {
       var obj = this.toObject();
       return obj;
