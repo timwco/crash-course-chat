@@ -1,12 +1,19 @@
 .wrapper {
-  border-top: 5px solid #233139; }
+  border-top: 5px solid #233139;
+  position: relative; }
 
 header {
+  margin-top: 25px;
   text-align: center; }
   header img {
     width: 125px; }
   header h1 {
     font-size: 15px; }
+
+.main-nav {
+  position: absolute;
+  top: 5px;
+  right: 15px; }
 
 .container {
   width: 1100px;

@@ -6,11 +6,11 @@ let config = function($stateProvider, $urlRouterProvider) {
       templateUrl: 'templates/layout.tpl.html'
     })
 
-    // Login
-    .state('root.login', {
-      url: '/login',
+    // Admin
+    .state('root.admin', {
+      url: '/admin',
       controller: 'UserController as vm',
-      templateUrl: 'templates/login.tpl.html'
+      templateUrl: 'templates/admin.tpl.html'
     })
 
     // Admins

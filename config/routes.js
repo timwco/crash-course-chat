@@ -40,8 +40,8 @@ module.exports.routes = {
   'post /login': 'AuthController.login',
   '/logout': 'AuthController.logout',
 
-  '/auth/github':'AuthController.github',
-  '/auth/github/callback':'AuthController.githubCallback',
+  '/auth/google':'AuthController.google',
+  '/auth/google/callback':'AuthController.googleCallback',
 
   // Room Management
   'post /room': 'RoomController.create',

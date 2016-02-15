@@ -39,18 +39,17 @@
          res.redirect('/');
      },
 
-		 github: function(req, res){
-			 console.log("Passing on to github");
-			 passport.authenticate('github')(req, res);
+		 google: function(req, res, next){
+			 passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);
 		 },
 
-		 githubCallback: function(req, res){
-			 console.log("Returned callback");
-       passport.authenticate('github', { failureRedirect: '/login' }),
-       function(req, res) {
-         // Successful authentication, redirect home.
-         res.redirect('/');
-       }
-
+		 googleCallback: function(req, res, next){
+       passport.authenticate(
+         'google',
+         {
+           successRedirect: '/#/admin?yay',
+           failureRedirect: '/#/admin?boo'
+         }
+       )(req, res, next);
 		 }
 }

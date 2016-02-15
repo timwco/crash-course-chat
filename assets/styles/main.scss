@@ -6,9 +6,11 @@ $light: #d1d2d4;
 
 .wrapper {
   border-top: 5px solid $shield;
+  position: relative;
 }
 
 header {
+  margin-top: 25px;
   text-align: center;
   img {
     width: 125px;
@@ -16,6 +18,12 @@ header {
   h1 {
     font-size: 15px;
   }
+}
+
+.main-nav {
+  position: absolute;
+  top: 5px;
+  right: 15px;
 }
 
 .container {

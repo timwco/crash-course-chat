@@ -9,28 +9,24 @@ var bcrypt = require("bcrypt");
 module.exports = {
 
   attributes: {
-    username:{
-      type: "string",
-      required: true
-    },
-    email:{
+    name: {
       type: "string"
     },
-    password:{
+    email:{
       type: "string",
+      required: true
     },
     authProvider:{
       type:'string',
       defaultsTo: 'local'
     },
-    authToken:{
+    googleId:{
       type:'string',
       unique: true
     },
     toJSON: function() {
-            var obj = this.toObject();
-            delete obj.password;
-            return obj;
+      var obj = this.toObject();
+      return obj;
     }
   },
   beforeCreate: function(user, cb) {
