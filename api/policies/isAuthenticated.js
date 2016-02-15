@@ -3,6 +3,6 @@ module.exports = function(req, res, next) {
       return next();
     }
     else{
-      return res.redirect('/#/admin?c=1');
+      return res.json({ authed: false });
     }
 };
