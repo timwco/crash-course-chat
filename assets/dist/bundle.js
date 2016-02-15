@@ -84,7 +84,7 @@ exports.default = RoomController;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var WelcomeController = function WelcomeController($http) {
+var WelcomeController = function WelcomeController($http, RoomService, $state) {
 
   var vm = this;
 
@@ -95,13 +95,22 @@ var WelcomeController = function WelcomeController($http) {
   function activate() {}
 
   function register(info, roomID) {
-    $http.post('/register', info).then(function (res) {
+
+    RoomService.get(roomID).then(function (res) {
       console.log(res);
+
+      info.class = res.data.class;
+      info.date = res.data.date;
+
+      $http.post('/register', info).then(function (res) {
+        console.log(res);
+        $state.go('root.singleRoom', { id: roomID });
+      });
     });
   }
 };
 
-WelcomeController.$inject = ['$http'];
+WelcomeController.$inject = ['$http', 'RoomService', '$state'];
 exports.default = WelcomeController;
 
 },{}],4:[function(require,module,exports){

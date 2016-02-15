@@ -18,7 +18,15 @@ module.exports = {
    ***************************************************************************/
 
   models: {
-    connection: 'devMongodbServer'
-  }
+    connection: 'devMongodbServer' // commented out
+  },
+
+  session: {
+    adapter: 'memory'
+  },
+
+  sockets: {
+    adapter: 'memory'
+}
 
 };

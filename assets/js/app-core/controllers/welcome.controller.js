@@ -1,4 +1,4 @@
-let WelcomeController = function($http) {
+let WelcomeController = function($http, RoomService, $state) {
 
   let vm = this;
 
@@ -11,12 +11,24 @@ let WelcomeController = function($http) {
   }
 
   function register(info, roomID) {
-    $http.post('/register', info).then( (res) => {
+
+    RoomService.get(roomID).then( (res) => {
       console.log(res);
+
+      info.class = res.data.class;
+      info.date  = res.data.date;
+
+      $http.post('/register', info).then( (res) => {
+        console.log(res);
+        $state.go('root.singleRoom', { id: roomID });
+      });
+
     });
+
+
   }
 
 };
 
-WelcomeController.$inject = ['$http'];
+WelcomeController.$inject = ['$http', 'RoomService', '$state'];
 export default WelcomeController;
