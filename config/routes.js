@@ -39,7 +39,7 @@ module.exports.routes = {
   // User Login / Management
   '/auth/google':'AuthController.google',
   '/auth/google/callback':'AuthController.googleCallback',
-  'post /auth/verify':'AuthController.verify',
+  '/auth/verify':'AuthController.verify',
 
   // Room Management
   'post /room': 'RoomController.create',

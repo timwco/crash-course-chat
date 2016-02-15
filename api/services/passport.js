@@ -20,15 +20,23 @@ passport.use(new GoogleStrategy({
     callbackURL: "http://localhost:5000/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, cb) {
-    var user = {
-      name: profile.displayName,
-      email: profile.emails[0].value,
-      authProvider: 'Google',
-      googleId: profile.id
+
+    if(profile._json.domain === 'theironyard.com') {
+
+      var user = {
+        name: profile.displayName,
+        email: profile.emails[0].value,
+        authProvider: 'Google',
+        googleId: profile.id
+      }
+      User.findOrCreate(user, function (err, user) {
+        return cb(err, user);
+      });
+
+    } else {
+      return cb("Invalid host domain");
     }
-    User.findOrCreate(user, function (err, user) {
-      return cb(err, user);
-    });
+
   }
 ));
 

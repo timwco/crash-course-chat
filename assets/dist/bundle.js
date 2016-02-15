@@ -4,6 +4,26 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var AdminController = function AdminController($http) {
+
+  var vm = this;
+
+  activate();
+
+  function activate() {
+    $http.get('/auth/verify');
+  }
+};
+
+AdminController.$inject = ['$http'];
+exports.default = AdminController;
+
+},{}],2:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var CreateRoomController = function CreateRoomController($http, $state) {
 
   var vm = this;
@@ -21,7 +41,7 @@ var CreateRoomController = function CreateRoomController($http, $state) {
 CreateRoomController.$inject = ['$http', '$state'];
 exports.default = CreateRoomController;
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52,17 +72,6 @@ var RoomController = function RoomController($http, FireChat, $stateParams) {
 
 RoomController.$inject = ['$http', 'FireChat', '$stateParams'];
 exports.default = RoomController;
-
-},{}],3:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var UserController = function UserController() {};
-
-UserController.$inject = [];
-exports.default = UserController;
 
 },{}],4:[function(require,module,exports){
 'use strict';
@@ -105,9 +114,9 @@ var _createRoom = require('./controllers/create-room.controller');
 
 var _createRoom2 = _interopRequireDefault(_createRoom);
 
-var _user = require('./controllers/user.controller');
+var _admin = require('./controllers/admin.controller');
 
-var _user2 = _interopRequireDefault(_user);
+var _admin2 = _interopRequireDefault(_admin);
 
 var _welcome = require('./controllers/welcome.controller');
 
@@ -123,9 +132,9 @@ var _firechat2 = _interopRequireDefault(_firechat);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_angular2.default.module('app.core', []).controller('RoomController', _room2.default).controller('CreateRoomController', _createRoom2.default).controller('UserController', _user2.default).controller('WelcomeController', _welcome2.default).service('RoomService', _room4.default).service('FireChat', _firechat2.default);
+_angular2.default.module('app.core', []).controller('RoomController', _room2.default).controller('CreateRoomController', _createRoom2.default).controller('AdminController', _admin2.default).controller('WelcomeController', _welcome2.default).service('RoomService', _room4.default).service('FireChat', _firechat2.default);
 
-},{"./controllers/create-room.controller":1,"./controllers/room.controller":2,"./controllers/user.controller":3,"./controllers/welcome.controller":4,"./services/firechat.service":6,"./services/room.service":7,"angular":12}],6:[function(require,module,exports){
+},{"./controllers/admin.controller":1,"./controllers/create-room.controller":2,"./controllers/room.controller":3,"./controllers/welcome.controller":4,"./services/firechat.service":6,"./services/room.service":7,"angular":12}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -182,8 +191,8 @@ var config = function config($stateProvider, $urlRouterProvider) {
 
   // Admin
   .state('root.admin', {
-    url: '/admin',
-    controller: 'UserController as vm',
+    url: '/admin?c',
+    controller: 'AdminController as vm',
     templateUrl: 'templates/admin.tpl.html'
   })
 

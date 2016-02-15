@@ -8,8 +8,8 @@ let config = function($stateProvider, $urlRouterProvider) {
 
     // Admin
     .state('root.admin', {
-      url: '/admin',
-      controller: 'UserController as vm',
+      url: '/admin?c',
+      controller: 'AdminController as vm',
       templateUrl: 'templates/admin.tpl.html'
     })
 

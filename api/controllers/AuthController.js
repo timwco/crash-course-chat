@@ -15,7 +15,12 @@
      },
 
      verify: function (req, res) {
+       res.redirect('/#/admin?verified');
+     },
 
+     logout: function(req, res) {
+       req.logout();
+       res.redirect('/#/admin');
      },
 
 		 google: function(req, res, next){
@@ -24,7 +29,15 @@
 
 		 googleCallback: function(req, res, next){
        passport.authenticate('google', function (err, user, info) {
-        res.redirect('/#/admin?' + user.email);
+
+       if (err) return res.redirect('/#/admin?' + err);
+
+        req.logIn(user, function(err) {
+          if (err) return res.redirect('/#/admin?' + err);
+        });
+
+        return res.redirect('/#/admin?' + user.email);
+
       })(req, res, next);
 		 }
 }

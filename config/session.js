@@ -14,7 +14,7 @@
 
 module.exports.session = {
   isLoggedIn: function(){
-    
+
     return true;
   },
 

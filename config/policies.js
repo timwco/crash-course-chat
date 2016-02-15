@@ -30,9 +30,13 @@ module.exports.policies = {
 
    '*': true,
 
-   'PostController': {
-      '*': 'isAuthenticated'
+   'RoomController': {
+      'create': 'isAuthenticated'
    },
+
+   'AuthController': {
+     'verify': 'isAuthenticated'
+   }
 
 
 
