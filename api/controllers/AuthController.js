@@ -15,6 +15,7 @@
      },
 
      verify: function (req, res) {
+       console.log(req);
        if (req.session.passport) {
          return res.json({ authed: true, passport: req.session.passport });
        }
