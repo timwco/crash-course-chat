@@ -1,7 +1,7 @@
 var passport = require('passport'),
 LocalStrategy = require('passport-local').Strategy,
 GithubStrategy = require('passport-github').Strategy,
-GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
+GoogleStrategy = require('passport-google-oauth20').Strategy,
 bcrypt = require('bcrypt');
 
 passport.serializeUser(function(user, done) {
