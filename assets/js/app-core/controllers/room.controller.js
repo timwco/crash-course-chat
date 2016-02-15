@@ -14,13 +14,14 @@ let RoomController = function(AuthService, RoomService, FireChat, $stateParams, 
       vm.authed = res.data.authed;
     });
 
-    chat = FireChat.createChat('room-' + $stateParams.id);
-    vm.messages = FireChat.getMessages(chat);
-
     RoomService.get($stateParams.id).then( (res) => {
       console.log(res);
       vm.room = res.data;
       vm.description = $sce.trustAsHtml(res.data.desc);
+
+      chat = FireChat.createChat('room-' + res.data.id);
+      vm.messages = FireChat.getMessages(chat);
+
     });
   }
 
