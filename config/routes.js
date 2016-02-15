@@ -44,7 +44,10 @@ module.exports.routes = {
   '/auth/github/callback':'AuthController.githubCallback',
 
   // Room Management
-  'post /room': 'RoomController.create'
+  'post /room': 'RoomController.create',
+
+  // Guest Register
+  'post /register': 'GuestController.create'
 
 
 

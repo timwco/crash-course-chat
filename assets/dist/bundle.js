@@ -4,31 +4,21 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var CreateRoomController = function CreateRoomController($http) {
+var CreateRoomController = function CreateRoomController($http, $state) {
 
   var vm = this;
 
   vm.createRoom = createRoom;
 
-  activate();
-
-  function activate() {
-    setTimeout(function () {
-      var date = new Date().toISOString().substring(0, 10);
-      var field = document.querySelector('#date');
-      field.value = date;
-    }, 100);
-  }
-
   function createRoom(data) {
     console.log(data);
     $http.post('/room', data).then(function (res) {
-      console.log(res);
+      $state.go('root.singleRoom', { id: res.data.roomID });
     });
   }
 };
 
-CreateRoomController.$inject = ['$http'];
+CreateRoomController.$inject = ['$http', '$state'];
 exports.default = CreateRoomController;
 
 },{}],2:[function(require,module,exports){
@@ -75,12 +65,12 @@ UserController.$inject = [];
 exports.default = UserController;
 
 },{}],4:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var WelcomeController = function WelcomeController() {
+var WelcomeController = function WelcomeController($http) {
 
   var vm = this;
 
@@ -90,10 +80,14 @@ var WelcomeController = function WelcomeController() {
 
   function activate() {}
 
-  function register(info, roomID) {}
+  function register(info, roomID) {
+    $http.post('/register', info).then(function (res) {
+      console.log(res);
+    });
+  }
 };
 
-WelcomeController.$inject = [];
+WelcomeController.$inject = ['$http'];
 exports.default = WelcomeController;
 
 },{}],5:[function(require,module,exports){

@@ -1,27 +1,17 @@
-let CreateRoomController = function($http) {
+let CreateRoomController = function($http, $state) {
 
   let vm = this;
 
   vm.createRoom = createRoom;
 
-  activate();
-
-  function activate () {
-    setTimeout(function () {      
-      let date = new Date().toISOString().substring(0, 10);
-      let field = document.querySelector('#date');
-      field.value = date;
-    }, 100)
-  }
-
   function createRoom (data) {
     console.log(data);
     $http.post('/room', data).then( (res) => {
-      console.log(res);
+      $state.go('root.singleRoom', { id: res.data.roomID });
     });
   }
 
 };
 
-CreateRoomController.$inject = ['$http'];
+CreateRoomController.$inject = ['$http', '$state'];
 export default CreateRoomController;

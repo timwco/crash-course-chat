@@ -1,4 +1,4 @@
-let WelcomeController = function() {
+let WelcomeController = function($http) {
 
   let vm = this;
 
@@ -11,10 +11,12 @@ let WelcomeController = function() {
   }
 
   function register(info, roomID) {
-
+    $http.post('/register', info).then( (res) => {
+      console.log(res);
+    });
   }
 
 };
 
-WelcomeController.$inject = [];
+WelcomeController.$inject = ['$http'];
 export default WelcomeController;
