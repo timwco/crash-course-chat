@@ -4,18 +4,36 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var AdminController = function AdminController($http) {
+var AdminController = function AdminController(RoomService, AuthService, $stateParams, $state) {
 
   var vm = this;
 
+  vm.createRoom = createRoom;
+  vm.alert = false;
+  vm.authed = false;
+
   activate();
 
+  // Verify User Logged in
   function activate() {
-    $http.get('/auth/verify');
+
+    if ($stateParams.c) {
+      vm.alert = true;
+    }
+
+    AuthService.verify().then(function (res) {
+      vm.authed = res.data.authed;
+    });
+  }
+
+  function createRoom(data) {
+    RoomService.create(data).then(function (res) {
+      $state.go('root.singleRoom', { id: res.data.roomID });
+    });
   }
 };
 
-AdminController.$inject = ['$http'];
+AdminController.$inject = ['RoomService', 'AuthService', '$stateParams', '$state'];
 exports.default = AdminController;
 
 },{}],2:[function(require,module,exports){
@@ -24,43 +42,24 @@ exports.default = AdminController;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var CreateRoomController = function CreateRoomController($http, $state) {
-
-  var vm = this;
-
-  vm.createRoom = createRoom;
-
-  function createRoom(data) {
-    console.log(data);
-    $http.post('/room', data).then(function (res) {
-      $state.go('root.singleRoom', { id: res.data.roomID });
-    });
-  }
-};
-
-CreateRoomController.$inject = ['$http', '$state'];
-exports.default = CreateRoomController;
-
-},{}],3:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var RoomController = function RoomController($http, FireChat, $stateParams) {
+var RoomController = function RoomController(AuthService, FireChat, $stateParams) {
 
   var vm = this;
 
   var chat = [];
 
   vm.addMessage = addMessage;
+  vm.authed = false;
 
   activate();
 
   function activate() {
+    AuthService.verify().then(function (res) {
+      vm.authed = res.data.authed;
+    });
+
     chat = FireChat.createChat('room-' + $stateParams.id);
     vm.messages = FireChat.getMessages(chat);
-    console.log(vm.messages);
   }
 
   function addMessage(message) {
@@ -70,10 +69,10 @@ var RoomController = function RoomController($http, FireChat, $stateParams) {
   }
 };
 
-RoomController.$inject = ['$http', 'FireChat', '$stateParams'];
+RoomController.$inject = ['AuthService', 'FireChat', '$stateParams'];
 exports.default = RoomController;
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -99,7 +98,7 @@ var WelcomeController = function WelcomeController($http) {
 WelcomeController.$inject = ['$http'];
 exports.default = WelcomeController;
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 var _angular = require('angular');
@@ -109,10 +108,6 @@ var _angular2 = _interopRequireDefault(_angular);
 var _room = require('./controllers/room.controller');
 
 var _room2 = _interopRequireDefault(_room);
-
-var _createRoom = require('./controllers/create-room.controller');
-
-var _createRoom2 = _interopRequireDefault(_createRoom);
 
 var _admin = require('./controllers/admin.controller');
 
@@ -130,11 +125,31 @@ var _firechat = require('./services/firechat.service');
 
 var _firechat2 = _interopRequireDefault(_firechat);
 
+var _auth = require('./services/auth.service');
+
+var _auth2 = _interopRequireDefault(_auth);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_angular2.default.module('app.core', []).controller('RoomController', _room2.default).controller('CreateRoomController', _createRoom2.default).controller('AdminController', _admin2.default).controller('WelcomeController', _welcome2.default).service('RoomService', _room4.default).service('FireChat', _firechat2.default);
+_angular2.default.module('app.core', []).controller('RoomController', _room2.default).controller('AdminController', _admin2.default).controller('WelcomeController', _welcome2.default).service('RoomService', _room4.default).service('FireChat', _firechat2.default).service('AuthService', _auth2.default);
 
-},{"./controllers/admin.controller":1,"./controllers/create-room.controller":2,"./controllers/room.controller":3,"./controllers/welcome.controller":4,"./services/firechat.service":6,"./services/room.service":7,"angular":12}],6:[function(require,module,exports){
+},{"./controllers/admin.controller":1,"./controllers/room.controller":2,"./controllers/welcome.controller":3,"./services/auth.service":5,"./services/firechat.service":6,"./services/room.service":7,"angular":12}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var AuthService = function AuthService($http) {
+
+  this.verify = function () {
+    return $http.get('/auth/verify');
+  };
+};
+
+AuthService.$inject = ['$http'];
+exports.default = AuthService;
+
+},{}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -163,17 +178,19 @@ FireChat.$inject = ['$firebaseObject', '$firebaseArray'];
 exports.default = FireChat;
 
 },{}],7:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var RoomService = function RoomService() {
+var RoomService = function RoomService($http) {
 
-  return this;
+  this.create = function (data) {
+    return $http.post('/room', data);
+  };
 };
 
-RoomService.$inject = [];
+RoomService.$inject = ['$http'];
 exports.default = RoomService;
 
 },{}],8:[function(require,module,exports){
@@ -249,7 +266,7 @@ _angular2.default.module('app', ['ui.router', 'firebase', 'app.core']).config(_c
 
 // Config
 
-},{"./app-core/index":5,"./app-utils/config":8,"angular":12,"angular-ui-router":10,"angularfire":14}],10:[function(require,module,exports){
+},{"./app-core/index":4,"./app-utils/config":8,"angular":12,"angular-ui-router":10,"angularfire":14}],10:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.2.18

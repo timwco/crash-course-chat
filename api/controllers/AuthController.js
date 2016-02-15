@@ -15,7 +15,10 @@
      },
 
      verify: function (req, res) {
-       res.redirect('/#/admin?verified');
+       if (req.session.passport) {
+         return res.json({ authed: true, passport: req.session.passport });
+       }
+       res.json({ authed: false });
      },
 
      logout: function(req, res) {
@@ -30,13 +33,13 @@
 		 googleCallback: function(req, res, next){
        passport.authenticate('google', function (err, user, info) {
 
-       if (err) return res.redirect('/#/admin?' + err);
+       if (err) return res.redirect('/#/admin?c=1');
 
         req.logIn(user, function(err) {
-          if (err) return res.redirect('/#/admin?' + err);
+          if (err) return res.redirect('/#/admin?c=1');
         });
 
-        return res.redirect('/#/admin?' + user.email);
+        return res.redirect('/#/admin');
 
       })(req, res, next);
 		 }

@@ -34,10 +34,6 @@ module.exports.policies = {
       'create': 'isAuthenticated'
    },
 
-   'AuthController': {
-     'verify': 'isAuthenticated'
-   }
-
 
 
   /***************************************************************************

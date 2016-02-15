@@ -1,1 +1,43 @@
-<a href="/auth/google">Google Login Yeah</a>
+<div class="alert alert-error text-centered" ng-show="vm.alert">Sorry, we couldn't log you in. Make sure this is coming from an `@theironyard.com` email address.</div>
+
+<div class="text-centered" ng-hide="vm.authed">
+  <a href="/auth/google" class="btn google-login" big>Google Login</a>
+</div>
+
+<div class="adminContainer" ng-show="vm.authed">
+  
+  <form class="forms form-container" ng-submit="vm.createRoom(room)">
+    <row>
+      <column cols="12" class="dateField">
+        <h2>Create A Room</h2>
+        <label>Crash Course Date</label>
+        <input type="date" ng-model="room.date" id="date">
+      </column>
+    </row>
+    <row>
+      <column cols="12">
+        <select class="select" ng-model="room.class">
+            <option value="">Which Class?</option>
+            <option value="js">JavaScript</option>
+            <option value="rb">Ruby</option>
+            <option value="de">Design</option>
+            <option value="ios">iOS</option>
+            <option value="java">Java</option>
+            <option value="net">.NET</option>
+        </select>
+      </column>
+    </row>
+    <row>
+      <column cols="12">
+        <label>Details <small>(supports markdown)</small></label>
+        <textarea rows="6" ng-model="room.description"></textarea>
+      </colunm>
+    </row>
+    <row>
+      <column cols="12">
+        <button class="btn">Create Room</button>
+      </colunm>
+    </row>
+  </form>
+
+</div>

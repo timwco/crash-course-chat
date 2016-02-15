@@ -1,8 +1,10 @@
-let RoomService = function() {
+let RoomService = function($http) {
 
-  return this;
+  this.create = (data) => {
+    return $http.post('/room', data);
+  }
 
 };
 
-RoomService.$inject = [];
+RoomService.$inject = ['$http'];
 export default RoomService ;

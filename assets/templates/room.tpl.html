@@ -11,7 +11,7 @@
         <li ng-repeat="message in vm.messages">{{ message.$value }}</li>
       </ul>
 
-      <form ng-submit="vm.addMessage(vm.message)" class="forms">
+      <form ng-submit="vm.addMessage(vm.message)" class="forms" ng-show="vm.authed">
         <section>
           <input autocomplete="off" type="text" ng-model="vm.message" />
         </section>
