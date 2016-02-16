@@ -12,6 +12,7 @@ module.exports = {
 			name  : req.param('name'),
 			email  : req.param('email'),
 			class : req.param('class'),
+			roomID : req.param('roomID'),
 			date  : new Date().toISOString().substring(0, 10)
 		}
 

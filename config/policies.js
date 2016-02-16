@@ -31,7 +31,9 @@ module.exports.policies = {
    '*': true,
 
    'RoomController': {
-      'create': 'isAuthenticated'
+      'create': 'isAuthenticated',
+      'export': 'isAuthenticated',
+      'all': 'isAuthenticated'
    },
 
    'AuthController': {

@@ -22,7 +22,7 @@ let config = function($stateProvider, $urlRouterProvider) {
 
     // Guests
     .state('root.welcome', {
-      url: '/',
+      url: '/?c',
       controller: 'WelcomeController as vm',
       templateUrl: 'templates/welcome.tpl.html'
     })

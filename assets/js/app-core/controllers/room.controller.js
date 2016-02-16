@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-let RoomController = function(AuthService, RoomService, FireChat, $stateParams, $sce) {
+let RoomController = function(AuthService, RoomService, FireChat, $stateParams, $sce, $cookies, $state) {
 
   let vm = this;
 
@@ -13,11 +13,15 @@ let RoomController = function(AuthService, RoomService, FireChat, $stateParams, 
   activate();
 
   function activate() {
+
     AuthService.verify().then( (res) => {
       vm.authed = res.data.authed;
+      if (!vm.authed) { checkRegistration($stateParams.id); }
     });
 
     RoomService.get($stateParams.id).then( (res) => {
+
+      if (res.data.noRoom) { $state.go('root.welcome', { c: 'noroom' }); }
 
       // Set Room Description & Details
       vm.date = moment(res.data.date).format('MMMM, Do YYYY');
@@ -33,6 +37,13 @@ let RoomController = function(AuthService, RoomService, FireChat, $stateParams, 
     });
   }
 
+  function checkRegistration(id) {
+    let reg = $cookies.get('tiy_cc_reg');
+    if (reg !== id) {
+      $state.go('root.welcome', { c: 'unregistered' });
+    }
+  }
+
   function addMessage(message) {
     FireChat.addMessage(vm.messages, message).then( (res) => {
       vm.message = '';
@@ -46,5 +57,5 @@ let RoomController = function(AuthService, RoomService, FireChat, $stateParams, 
 
 };
 
-RoomController.$inject = ['AuthService', 'RoomService', 'FireChat', '$stateParams', '$sce'];
+RoomController.$inject = ['AuthService', 'RoomService', 'FireChat', '$stateParams', '$sce', '$cookies', '$state'];
 export default RoomController;

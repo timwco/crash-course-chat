@@ -12,6 +12,10 @@ module.exports = {
       type: 'string',
       required: true
     },
+    roomID: {
+      type: 'string',
+      required: true
+    },
     email: {
       type: 'string',
       required: true

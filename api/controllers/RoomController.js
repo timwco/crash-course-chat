@@ -5,8 +5,10 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var MarkdownIt = require('markdown-it'),
-    md = new MarkdownIt();
+var MarkdownIt  = require('markdown-it'),
+    md          = new MarkdownIt(),
+    json2csv    = require('json2csv'),
+    fs          = require('fs');
 
 module.exports = {
 
@@ -29,6 +31,22 @@ module.exports = {
 
 	},
 
+  export: function (req, res) {
+
+    Guest
+      .find({ roomID: req.param('id')} )
+      .exec(function(err, guestList) {
+        var fields = ['name', 'date', 'class', 'email'];
+        console.log(guestList);
+        json2csv({ data: guestList, fields: fields }, function(err, csv) {
+          if (err) console.log(err);
+          var filename = req.param('id') + "-export.csv";
+          res.attachment(filename);
+          res.end(csv, 'UTF-8');
+        });
+	  	});
+  },
+
   all: function (req, res) {
     Room.find().exec(function(err, rooms) {
     	return res.json(rooms);
@@ -39,8 +57,12 @@ module.exports = {
 		Room
 			.findOne({ roomID: req.param('id') })
 			.exec(function(err, room) {
-				room.desc = md.render(room.desc);
-	    	return res.json(room);
+        if (room !== undefined) {
+          room.desc = md.render(room.desc);
+          return res.json(room);
+        } else {
+          return res.json({ noRoom: true });
+        }
 	  	});
 	}
 

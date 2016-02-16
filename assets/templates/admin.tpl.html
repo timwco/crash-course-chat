@@ -53,7 +53,7 @@
         <td>{{ room.class | uppercase }}</td>
         <td>{{ room.date | moment }}</td>
         <td><a href="/#/room/{{ room.roomID }}">View</a></td>
-        <td><a href="#">Export</td>
+        <td><a target="_blank" href="/room/export/{{ room.id }}">Export</td>
       </tr>
     </tbody>
   </table>

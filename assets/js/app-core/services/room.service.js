@@ -22,8 +22,7 @@ let RoomService = function($http) {
 
   this.getRooms = () => {
     return $http.get('room');
-  }
-
+  };
 
 };
 
