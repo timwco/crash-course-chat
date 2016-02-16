@@ -51,23 +51,17 @@ var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _autolinker = require('autolinker');
-
-var _autolinker2 = _interopRequireDefault(_autolinker);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var RoomController = function RoomController(AuthService, RoomService, FireChat, $stateParams, $sce) {
 
   var vm = this;
 
-  var chat = {};
-  var messagesArr = [];
+  var chat = [];
 
   vm.addMessage = addMessage;
-  vm.deleteMessage = deleteMessage;
   vm.authed = false;
-  vm.chats = [];
+  vm.deleteMessage = deleteMessage;
 
   activate();
 
@@ -84,41 +78,29 @@ var RoomController = function RoomController(AuthService, RoomService, FireChat,
 
       // Create Chat Connection
       chat = FireChat.createChat('room-' + res.data.id);
-      messagesArr = FireChat.getMessages(chat);
-      messagesArr.$loaded().then(function () {
-        linkify(messagesArr.linkified());
-      });
+      vm.messages = FireChat.getMessages(chat);
 
       // Set Room Title
       vm.title = RoomService.key(res.data.class);
     });
   }
 
-  function linkify(arr) {
-    vm.messages = arr.map(function (msg) {
-      return { html: $sce.trustAsHtml(_autolinker2.default.link(msg.html)), id: msg.id };
-    });
-  }
-
   function addMessage(message) {
-    FireChat.addMessage(messagesArr, message).then(function (res) {
+    FireChat.addMessage(vm.messages, message).then(function (res) {
       vm.message = '';
-      linkify(messagesArr.linkified());
     });
   }
 
-  function deleteMessage(id) {
-    var msg = messagesArr.$getRecord(id);
-    FireChat.delete(messagesArr, msg).then(function (res) {
-      linkify(messagesArr.linkified());
-    });
+  function deleteMessage(message) {
+    console.log(message);
+    FireChat.delete(vm.messages, message);
   }
 };
 
 RoomController.$inject = ['AuthService', 'RoomService', 'FireChat', '$stateParams', '$sce'];
 exports.default = RoomController;
 
-},{"autolinker":16,"moment":17}],3:[function(require,module,exports){
+},{"moment":18}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -158,6 +140,29 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _autolinker = require('autolinker');
+
+var _autolinker2 = _interopRequireDefault(_autolinker);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var linkifyFilter = function linkifyFilter($sce) {
+
+  return function (input) {
+    return $sce.trustAsHtml(_autolinker2.default.link(input));
+  };
+};
+
+linkifyFilter.$inject = ['$sce'];
+exports.default = linkifyFilter;
+
+},{"autolinker":17}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
@@ -174,7 +179,7 @@ var momentFilter = function momentFilter() {
 momentFilter.$inject = [];
 exports.default = momentFilter;
 
-},{"moment":17}],5:[function(require,module,exports){
+},{"moment":18}],6:[function(require,module,exports){
 'use strict';
 
 var _angular = require('angular');
@@ -209,11 +214,15 @@ var _moment = require('./filters/moment.filter');
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _linkify = require('./filters/linkify.filter');
+
+var _linkify2 = _interopRequireDefault(_linkify);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_angular2.default.module('app.core', []).controller('RoomController', _room2.default).controller('AdminController', _admin2.default).controller('WelcomeController', _welcome2.default).service('RoomService', _room4.default).service('FireChat', _firechat2.default).service('AuthService', _auth2.default).filter('moment', _moment2.default);
+_angular2.default.module('app.core', []).controller('RoomController', _room2.default).controller('AdminController', _admin2.default).controller('WelcomeController', _welcome2.default).service('RoomService', _room4.default).service('FireChat', _firechat2.default).service('AuthService', _auth2.default).filter('moment', _moment2.default).filter('linkify', _linkify2.default);
 
-},{"./controllers/admin.controller":1,"./controllers/room.controller":2,"./controllers/welcome.controller":3,"./filters/moment.filter":4,"./services/auth.service":6,"./services/firechat.service":7,"./services/room.service":8,"angular":13}],6:[function(require,module,exports){
+},{"./controllers/admin.controller":1,"./controllers/room.controller":2,"./controllers/welcome.controller":3,"./filters/linkify.filter":4,"./filters/moment.filter":5,"./services/auth.service":7,"./services/firechat.service":8,"./services/room.service":9,"angular":14}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -229,7 +238,7 @@ var AuthService = function AuthService($http) {
 AuthService.$inject = ['$http'];
 exports.default = AuthService;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -267,7 +276,7 @@ var FireChat = function FireChat($firebaseObject, $firebaseArray) {
 FireChat.$inject = ['$firebaseObject', '$firebaseArray'];
 exports.default = FireChat;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -308,7 +317,7 @@ var RoomService = function RoomService($http) {
 RoomService.$inject = ['$http'];
 exports.default = RoomService;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -355,7 +364,7 @@ var config = function config($stateProvider, $urlRouterProvider) {
 config.$inject = ['$stateProvider', '$urlRouterProvider'];
 exports.default = config;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 var _angular = require('angular');
@@ -381,7 +390,7 @@ _angular2.default.module('app', ['ui.router', 'firebase', 'app.core']).config(_c
 
 // Config
 
-},{"./app-core/index":5,"./app-utils/config":9,"angular":13,"angular-ui-router":11,"angularfire":15}],11:[function(require,module,exports){
+},{"./app-core/index":6,"./app-utils/config":10,"angular":14,"angular-ui-router":12,"angularfire":16}],12:[function(require,module,exports){
 /**
  * State-based routing for AngularJS
  * @version v0.2.18
@@ -4921,7 +4930,7 @@ angular.module('ui.router.state')
   .filter('isState', $IsStateFilter)
   .filter('includedByState', $IncludedByStateFilter);
 })(window, window.angular);
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.0
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -35350,11 +35359,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":12}],14:[function(require,module,exports){
+},{"./angular":13}],15:[function(require,module,exports){
 /*!
  * AngularFire is the officially supported AngularJS binding for Firebase. Firebase
  * is a full backend so you don't need servers to build your Angular app. AngularFire
@@ -37633,11 +37642,11 @@ if ( typeof Object.getPrototypeOf !== "function" ) {
     }
 })();
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 require('./dist/angularfire');
 module.exports = 'firebase';
 
-},{"./dist/angularfire":14}],16:[function(require,module,exports){
+},{"./dist/angularfire":15}],17:[function(require,module,exports){
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module unless amdModuleId is set
@@ -41200,7 +41209,7 @@ return Autolinker;
 
 }));
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 //! moment.js
 //! version : 2.11.2
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -44807,4 +44816,4 @@ return Autolinker;
     return _moment;
 
 }));
-},{}]},{},[10]);
+},{}]},{},[11]);

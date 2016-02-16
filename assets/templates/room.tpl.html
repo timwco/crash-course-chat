@@ -13,8 +13,8 @@
 
         <ul>
           <li ng-repeat="message in vm.messages">
-            <span ng-bind-html="message.html"></span>
-            <a href="" ng-click="vm.deleteMessage(message.id)" ng-show="vm.authed" class="delete badge badge-error" outline>X</a>
+            <span ng-bind-html="message.$value | linkify"></span>
+            <a href="" ng-click="vm.deleteMessage(message)" ng-show="vm.authed" class="delete badge badge-error" outline>X</a>
           </li>
         </ul>
 

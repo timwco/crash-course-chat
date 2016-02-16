@@ -9,6 +9,7 @@ import FireChat from './services/firechat.service';
 import AuthService from './services/auth.service';
 
 import momentFilter from './filters/moment.filter';
+import linkifyFilter from './filters/linkify.filter';
 
 angular
   .module('app.core', [])
@@ -19,4 +20,5 @@ angular
   .service('FireChat', FireChat)
   .service('AuthService', AuthService)
   .filter('moment', momentFilter)
+  .filter('linkify', linkifyFilter)
 ;
