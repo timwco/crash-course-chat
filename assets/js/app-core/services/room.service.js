@@ -19,6 +19,12 @@ let RoomService = function($http) {
       case 'net': return'.NET';
     };
   };
+
+  this.getRooms = () => {
+    return $http.get('room');
+  }
+
+
 };
 
 RoomService.$inject = ['$http'];

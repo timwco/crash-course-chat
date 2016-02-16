@@ -1,13 +1,17 @@
 import moment from 'moment';
+import Autolinker from 'autolinker';
 
 let RoomController = function(AuthService, RoomService, FireChat, $stateParams, $sce) {
 
   let vm = this;
 
-  let chat = [];
+  let chat = {};
+  let messagesArr = [];
 
   vm.addMessage = addMessage;
+  vm.deleteMessage = deleteMessage;
   vm.authed = false;
+  vm.chats = [];
 
   activate();
 
@@ -24,7 +28,10 @@ let RoomController = function(AuthService, RoomService, FireChat, $stateParams, 
 
       // Create Chat Connection
       chat = FireChat.createChat('room-' + res.data.id);
-      vm.messages = FireChat.getMessages(chat);
+      messagesArr = FireChat.getMessages(chat);
+      messagesArr.$loaded().then( () => {
+        linkify(messagesArr.linkified());
+      });
 
       // Set Room Title
       vm.title = RoomService.key(res.data.class);
@@ -32,9 +39,23 @@ let RoomController = function(AuthService, RoomService, FireChat, $stateParams, 
     });
   }
 
+  function linkify (arr) {
+    vm.messages = arr.map( (msg) => {
+      return { html: $sce.trustAsHtml(Autolinker.link(msg.html)), id: msg.id };
+    });
+  }
+
   function addMessage(message) {
-    FireChat.addMessage(vm.messages, message).then( (res) => {
+    FireChat.addMessage(messagesArr, message).then( (res) => {
       vm.message = '';
+      linkify(messagesArr.linkified());
+    });
+  }
+
+  function deleteMessage(id) {
+    let msg = messagesArr.$getRecord(id);
+    FireChat.delete(messagesArr, msg).then( (res) => {
+      linkify(messagesArr.linkified());
     });
   }
 

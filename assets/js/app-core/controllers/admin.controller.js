@@ -17,6 +17,10 @@ let AdminController = function(RoomService, AuthService, $stateParams, $state) {
       vm.authed = res.data.authed;
     });
 
+    RoomService.getRooms().then( (res) => {
+      vm.rooms = res.data;
+    });
+
   }
 
   function createRoom (data) {

@@ -24,6 +24,10 @@ var AdminController = function AdminController(RoomService, AuthService, $stateP
     AuthService.verify().then(function (res) {
       vm.authed = res.data.authed;
     });
+
+    RoomService.getRooms().then(function (res) {
+      vm.rooms = res.data;
+    });
   }
 
   function createRoom(data) {
@@ -47,16 +51,23 @@ var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _autolinker = require('autolinker');
+
+var _autolinker2 = _interopRequireDefault(_autolinker);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var RoomController = function RoomController(AuthService, RoomService, FireChat, $stateParams, $sce) {
 
   var vm = this;
 
-  var chat = [];
+  var chat = {};
+  var messagesArr = [];
 
   vm.addMessage = addMessage;
+  vm.deleteMessage = deleteMessage;
   vm.authed = false;
+  vm.chats = [];
 
   activate();
 
@@ -73,16 +84,33 @@ var RoomController = function RoomController(AuthService, RoomService, FireChat,
 
       // Create Chat Connection
       chat = FireChat.createChat('room-' + res.data.id);
-      vm.messages = FireChat.getMessages(chat);
+      messagesArr = FireChat.getMessages(chat);
+      messagesArr.$loaded().then(function () {
+        linkify(messagesArr.linkified());
+      });
 
       // Set Room Title
       vm.title = RoomService.key(res.data.class);
     });
   }
 
+  function linkify(arr) {
+    vm.messages = arr.map(function (msg) {
+      return { html: $sce.trustAsHtml(_autolinker2.default.link(msg.html)), id: msg.id };
+    });
+  }
+
   function addMessage(message) {
-    FireChat.addMessage(vm.messages, message).then(function (res) {
+    FireChat.addMessage(messagesArr, message).then(function (res) {
       vm.message = '';
+      linkify(messagesArr.linkified());
+    });
+  }
+
+  function deleteMessage(id) {
+    var msg = messagesArr.$getRecord(id);
+    FireChat.delete(messagesArr, msg).then(function (res) {
+      linkify(messagesArr.linkified());
     });
   }
 };
@@ -90,7 +118,7 @@ var RoomController = function RoomController(AuthService, RoomService, FireChat,
 RoomController.$inject = ['AuthService', 'RoomService', 'FireChat', '$stateParams', '$sce'];
 exports.default = RoomController;
 
-},{"moment":17}],3:[function(require,module,exports){
+},{"autolinker":16,"moment":17}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -130,23 +158,23 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _autolinker = require('autolinker');
+var _moment = require('moment');
 
-var _autolinker2 = _interopRequireDefault(_autolinker);
+var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var linkifyFilter = function linkifyFilter() {
+var momentFilter = function momentFilter() {
 
   return function (input) {
-    return _autolinker2.default.link(input);
+    return (0, _moment2.default)(input).format('MM-DD-YYYY');
   };
 };
 
-linkifyFilter.$inject = [];
-exports.default = linkifyFilter;
+momentFilter.$inject = [];
+exports.default = momentFilter;
 
-},{"autolinker":16}],5:[function(require,module,exports){
+},{"moment":17}],5:[function(require,module,exports){
 'use strict';
 
 var _angular = require('angular');
@@ -177,15 +205,15 @@ var _auth = require('./services/auth.service');
 
 var _auth2 = _interopRequireDefault(_auth);
 
-var _linkify = require('./filters/linkify.filter');
+var _moment = require('./filters/moment.filter');
 
-var _linkify2 = _interopRequireDefault(_linkify);
+var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_angular2.default.module('app.core', []).controller('RoomController', _room2.default).controller('AdminController', _admin2.default).controller('WelcomeController', _welcome2.default).service('RoomService', _room4.default).service('FireChat', _firechat2.default).service('AuthService', _auth2.default).filter('linkify', _linkify2.default);
+_angular2.default.module('app.core', []).controller('RoomController', _room2.default).controller('AdminController', _admin2.default).controller('WelcomeController', _welcome2.default).service('RoomService', _room4.default).service('FireChat', _firechat2.default).service('AuthService', _auth2.default).filter('moment', _moment2.default);
 
-},{"./controllers/admin.controller":1,"./controllers/room.controller":2,"./controllers/welcome.controller":3,"./filters/linkify.filter":4,"./services/auth.service":6,"./services/firechat.service":7,"./services/room.service":8,"angular":13}],6:[function(require,module,exports){
+},{"./controllers/admin.controller":1,"./controllers/room.controller":2,"./controllers/welcome.controller":3,"./filters/moment.filter":4,"./services/auth.service":6,"./services/firechat.service":7,"./services/room.service":8,"angular":13}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -209,21 +237,31 @@ Object.defineProperty(exports, "__esModule", {
 });
 var FireChat = function FireChat($firebaseObject, $firebaseArray) {
 
+  var ArrayHTML = $firebaseArray.$extend({
+    linkified: function linkified() {
+      var messages = [];
+      angular.forEach(this.$list, function (rec) {
+        messages.push({ html: rec.$value, id: rec.$id });
+      });
+      return messages;
+    }
+  });
+
   this.createChat = function (name) {
     return new Firebase('https://crashcoursechat.firebaseio.com/rooms/' + name + '/messages');
   };
 
   this.getMessages = function (ref) {
-    return $firebaseArray(ref);
+    return new ArrayHTML(ref);
   };
 
   this.addMessage = function (ref, message) {
     return ref.$add(message);
   };
 
-  // this.get = (messageId) => $firebaseObject(ref.child('messages').child(messageId)).$asObject();
-  //
-  // this.delete = (message) => messages.$remove(message);
+  this.delete = function (ref, message) {
+    return ref.$remove(message);
+  };
 };
 
 FireChat.$inject = ['$firebaseObject', '$firebaseArray'];
@@ -260,6 +298,10 @@ var RoomService = function RoomService($http) {
       case 'net':
         return '.NET';
     };
+  };
+
+  this.getRooms = function () {
+    return $http.get('room');
   };
 };
 

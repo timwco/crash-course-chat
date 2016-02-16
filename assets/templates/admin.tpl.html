@@ -1,3 +1,5 @@
+<div class="admin-view label label-default" ng-show="vm.authed">Administrator</div>
+
 <div class="alert alert-error text-centered" ng-show="vm.alert">Sorry, we couldn't log you in. Make sure this is coming from an `@theironyard.com` email address.</div>
 
 <div class="text-centered" ng-hide="vm.authed">
@@ -5,7 +7,7 @@
 </div>
 
 <div class="adminContainer" ng-show="vm.authed">
-  
+
   <form class="forms form-container" ng-submit="vm.createRoom(room)">
     <row>
       <column cols="12" class="dateField">
@@ -39,5 +41,21 @@
       </colunm>
     </row>
   </form>
+
+  <hr>
+
+  <h3 class="text-centered">Past Rooms</h3>
+
+  <table class="table-stripped width-7 zeroauto">
+    <tbody>
+      <tr ng-repeat="room in vm.rooms">
+        <td>{{ room.roomID }}</td>
+        <td>{{ room.class | uppercase }}</td>
+        <td>{{ room.date | moment }}</td>
+        <td><a href="/#/room/{{ room.roomID }}">View</a></td>
+        <td><a href="#">Export</td>
+      </tr>
+    </tbody>
+  </table>
 
 </div>

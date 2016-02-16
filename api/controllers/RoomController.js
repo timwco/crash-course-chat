@@ -29,6 +29,12 @@ module.exports = {
 
 	},
 
+  all: function (req, res) {
+    Room.find().exec(function(err, rooms) {
+    	return res.json(rooms);
+  	});
+  },
+
 	single: function (req, res) {
 		Room
 			.findOne({ roomID: req.param('id') })

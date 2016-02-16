@@ -3,6 +3,9 @@ $base: #727d84;
 $callout: #6fbbb7;
 $light: #d1d2d4;
 
+.zeroauto {
+  margin: 0 auto;
+}
 
 .wrapper {
   border-top: 5px solid $shield;
@@ -18,6 +21,14 @@ header {
   h1 {
     font-size: 15px;
   }
+}
+
+div.label.label-default.admin-view {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: $callout;
+  color: white;
 }
 
 .course-description {
@@ -38,7 +49,8 @@ header {
 }
 
 .container {
-  width: 1100px;
+  max-width: 900px;
+  padding: 0 25px 25px 25px;
   margin: 50px auto;
 }
 
@@ -75,7 +87,7 @@ header {
 .chat-window {
   .inner {
     border: 1px solid $shield;
-    border-radius: 4px;
+    border-radius: 4px 4px 0 0;
     background-color: lighten($light, 15%);
     position: relative;
     padding-bottom:40px;
@@ -93,12 +105,22 @@ header {
       list-style: none;
       li {
         padding: 0 5px;
+        position: relative;
         &:before {
           content: "\00bb";
           padding-right: 8px;
         }
         &:nth-child(even) {
           background-color: lighten($light, 10%);
+        }
+        .delete {
+          display: none;
+          position: absolute;
+          right: 5px;
+          top: 5px;
+        }
+        &:hover .delete {
+          display: block;
         }
       }
     }
@@ -108,6 +130,9 @@ header {
       width: 100%;
       bottom:0;
       left: 0;
+      input {
+        border-top: 3px solid $shield;
+      }
     }
   }
 }

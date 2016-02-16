@@ -8,7 +8,7 @@ import RoomService from './services/room.service';
 import FireChat from './services/firechat.service';
 import AuthService from './services/auth.service';
 
-import linkifyFilter from './filters/linkify.filter';
+import momentFilter from './filters/moment.filter';
 
 angular
   .module('app.core', [])
@@ -18,5 +18,5 @@ angular
   .service('RoomService', RoomService)
   .service('FireChat', FireChat)
   .service('AuthService', AuthService)
-  .filter('linkify', linkifyFilter)
+  .filter('moment', momentFilter)
 ;
