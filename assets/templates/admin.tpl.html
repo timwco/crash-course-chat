@@ -13,7 +13,7 @@
       <column cols="12" class="dateField">
         <h2>Create A Room</h2>
         <label>Crash Course Date</label>
-        <input type="date" ng-model="room.date" id="date">
+        <input type="text" id="datepicker" ng-model="room.date">
       </column>
     </row>
     <row>
@@ -44,7 +44,9 @@
 
   <hr>
 
-  <h3 class="text-centered">Past Rooms</h3>
+  <h3 class="text-centered">Past Events</h3>
+
+  <div class="alert alert-error text-centered" ng-show="vm.noData">Sorry, there are no attendees for that room.</div>
 
   <table class="table-stripped width-7 zeroauto">
     <tbody>
@@ -53,7 +55,7 @@
         <td>{{ room.class | uppercase }}</td>
         <td>{{ room.date | moment }}</td>
         <td><a href="/#/room/{{ room.roomID }}">View</a></td>
-        <td><a target="_blank" href="/room/export/{{ room.id }}">Export</td>
+        <td><a href="/room/export/{{ room.id }}">Export</td>
       </tr>
     </tbody>
   </table>

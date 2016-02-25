@@ -8,17 +8,19 @@
 var MarkdownIt  = require('markdown-it'),
     md          = new MarkdownIt(),
     json2csv    = require('json2csv'),
-    fs          = require('fs');
+    fs          = require('fs'),
+    moment      = require('moment');
 
 module.exports = {
 
 	create: function (req, res) {
 
 		Room.count(function (error, total) {
+
 			var params = {
 				roomID : total + 1,
 				name   : req.param('class') + '-' + req.param('date'),
-				date   : req.param('date'),
+        date   : moment(req.param('date')).format('MMMM, Do YYYY'),
 				class  : req.param('class'),
 				desc   : req.param('description')
 			}
@@ -33,12 +35,16 @@ module.exports = {
 
   export: function (req, res) {
 
+    var room = req.param('id');
+
     Guest
-      .find({ roomID: req.param('id')} )
-      .exec(function(err, guestList) {
+      .find({ roomID: room })
+      .exec(function(err, guests) {
         var fields = ['name', 'date', 'class', 'email'];
-        console.log(guestList);
-        json2csv({ data: guestList, fields: fields }, function(err, csv) {
+        if (guests.length < 1) {
+          return res.redirect('/#/admin?c=2');
+        }
+        json2csv({ data: guests, fields: fields }, function(err, csv) {
           if (err) console.log(err);
           var filename = req.param('id') + "-export.csv";
           res.attachment(filename);

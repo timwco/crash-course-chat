@@ -25,7 +25,7 @@ module.exports = {
       required: true
     },
     date: {
-      type: 'date',
+      type: 'string',
       required: true
     },
     toJSON: function() {

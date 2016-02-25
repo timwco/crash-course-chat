@@ -1,20 +1,30 @@
+import Pikaday from 'pikaday';
+
 let AdminController = function(RoomService, AuthService, $stateParams, $state) {
 
   let vm = this;
 
   vm.createRoom = createRoom;
   vm.alert = false;
-  vm.authed = false;
+  vm.noData = false;
 
   activate();
 
   // Verify User Logged in
   function activate() {
 
-    if ($stateParams.c) { vm.alert = true;}
+    if ($stateParams.c === '1') { vm.alert = true;}
+    if ($stateParams.c === '2') { vm.noData = true; }
 
     AuthService.verify().then( (res) => {
       vm.authed = res.data.authed;
+      if (vm.authed) {
+        new Pikaday({
+          field: document.getElementById('datepicker'),
+          format: 'MMM D, YYYY',
+          position: 'bottom left'
+        });
+      }
     });
 
     RoomService.getRooms().then( (res) => {
