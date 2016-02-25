@@ -53,7 +53,7 @@
       <tr ng-repeat="room in vm.rooms">
         <td>{{ room.roomID }}</td>
         <td>{{ room.class | uppercase }}</td>
-        <td>{{ room.date | moment }}</td>
+        <td>{{ room.date }}</td>
         <td><a href="/#/room/{{ room.roomID }}">View</a></td>
         <td><a href="/room/export/{{ room.id }}">Export</td>
       </tr>

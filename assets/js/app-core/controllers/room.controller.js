@@ -24,7 +24,7 @@ let RoomController = function(AuthService, RoomService, FireChat, $stateParams, 
       if (res.data.noRoom) { $state.go('root.welcome', { c: 'noroom' }); }
 
       // Set Room Description & Details
-      vm.date = moment(res.data.date).format('MMMM, Do YYYY');
+      vm.date = res.data.date;
       vm.description = $sce.trustAsHtml(res.data.desc);
 
       // Create Chat Connection
