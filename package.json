@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.1",
   "description": "A Sails & Firebase Chat App",
+  "engines": {
+    "node": "4.2.1"
+  },
   "keywords": [],
   "dependencies": {
     "bcrypt": "^0.8.5",
