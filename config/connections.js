@@ -56,6 +56,10 @@ module.exports.connections = {
   * Run: npm install sails-mongo                                             *
   *                                                                          *
   ***************************************************************************/
+  // mongodbServer: {
+  //   adapter: 'sails-mongo'
+  // },
+
   // devMongodbServer: {
   //   adapter: 'sails-mongo',
   //   host: 'localhost',
@@ -63,10 +67,10 @@ module.exports.connections = {
   //   database: 'tiycrashcourse'
   // },
 
-  prodMongodbServer: {
-    adapter: 'sails-mongo',
-    url: process.env.MONGOLAB_URI
-  },
+  // prodMongodbServer: {
+  //   adapter: 'sails-mongo',
+  //   url: process.env.MONGOLAB_URI
+  // },
 
   /***************************************************************************
   *                                                                          *

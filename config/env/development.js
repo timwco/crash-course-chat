@@ -18,7 +18,10 @@ module.exports = {
    ***************************************************************************/
 
   models: {
-    connection: 'devMongodbServer' // commented out
+    adapter: 'sails-mongo',
+    host: 'localhost',
+    port: 27017,
+    database: 'tiycrashcourse'
   },
 
   session: {

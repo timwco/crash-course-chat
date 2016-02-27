@@ -18,7 +18,8 @@ module.exports = {
    ***************************************************************************/
 
   models: {
-    connection: 'prodMongodbServer'
+    adapter: 'sails-mongo',
+    url: process.env.MONGOLAB_URI
   },
 
   /***************************************************************************
