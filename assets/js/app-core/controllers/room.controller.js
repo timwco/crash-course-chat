@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 let RoomController = function(AuthService, RoomService, FireChat, $stateParams, $sce, $cookies, $state) {
 
   let vm = this;
@@ -32,7 +30,7 @@ let RoomController = function(AuthService, RoomService, FireChat, $stateParams, 
       vm.messages = FireChat.getMessages(chat);
 
       // Set Room Title
-      vm.title = RoomService.key(res.data.class);
+      vm.title = res.data.class;
 
     });
   }

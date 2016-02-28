@@ -13,3 +13,4 @@ angular
   .module('app', ['ui.router', 'ngCookies', 'firebase', 'app.core'])
   .config(config)
 ;
+// change

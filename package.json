@@ -40,9 +40,8 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
-    "watch:sass": "node-sass -w assets/styles/main.scss assets/dist/main.css",
-    "watch:js": "watchify assets/js/index.js -o assets/dist/bundle.js -t [ babelify --presets [ es2015 ] ]",
-    "dev": "parallelshell \"foreman start\" \"npm run watch:js\" \"npm run watch:sass\""
+    "build": "gulp build",
+    "dev": "parallelshell \"foreman start\" \"gulp start\""
   },
   "main": "app.js",
   "repository": {
@@ -52,6 +51,13 @@
   "author": "Tim Whitacre",
   "license": "",
   "devDependencies": {
+    "gulp": "^3.9.0",
+    "browserify": "^11.2.0",
+    "gulp-watch": "^4.3.5",
+    "gulp-uglify": "^1.4.2",
+    "vinyl-source-stream": "^1.1.0",
+    "vinyl-buffer": "^1.0.0",
+    "gulp-sass": "^2.0.4",
     "angular": "1.5.0",
     "angular-cookies": "1.5.0",
     "angular-ui-router": "0.2.18",

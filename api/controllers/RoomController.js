@@ -8,8 +8,7 @@
 var MarkdownIt  = require('markdown-it'),
     md          = new MarkdownIt(),
     json2csv    = require('json2csv'),
-    fs          = require('fs'),
-    moment      = require('moment');
+    fs          = require('fs');
 
 module.exports = {
 
@@ -20,7 +19,7 @@ module.exports = {
 			var params = {
 				roomID : total + 1,
 				name   : req.param('class') + '-' + req.param('date'),
-        date   : moment(req.param('date')).format('MMMM, Do YYYY'),
+        date   : req.param('date'),
 				class  : req.param('class'),
 				desc   : req.param('description')
 			}

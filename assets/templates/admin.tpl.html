@@ -8,56 +8,63 @@
 
 <div class="adminContainer" ng-show="vm.authed">
 
-  <form class="forms form-container" ng-submit="vm.createRoom(room)">
-    <row>
-      <column cols="12" class="dateField">
-        <h2>Create A Room</h2>
-        <label>Crash Course Date</label>
-        <input type="text" id="datepicker" ng-model="room.date">
-      </column>
-    </row>
-    <row>
-      <column cols="12">
-        <select class="select" ng-model="room.class">
-            <option value="">Which Class?</option>
-            <option value="js">JavaScript</option>
-            <option value="rb">Ruby</option>
-            <option value="de">Design</option>
-            <option value="ios">iOS</option>
-            <option value="java">Java</option>
-            <option value="net">.NET</option>
-        </select>
-      </column>
-    </row>
-    <row>
-      <column cols="12">
-        <label>Details <small>(supports markdown)</small></label>
-        <textarea rows="6" ng-model="room.description"></textarea>
-      </colunm>
-    </row>
-    <row>
-      <column cols="12">
-        <button class="btn">Create Room</button>
-      </colunm>
-    </row>
-  </form>
+  <row>
+    <column cols="6">
+      <form class="forms form-container" ng-submit="vm.createRoom(room)">
+        <row>
+          <column cols="12" class="dateField">
+            <h2>Create A Room</h2>
+            <label>Crash Course Date</label>
+            <input type="text" id="datepicker" ng-model="room.date">
+          </column>
+        </row>
+        <row>
+          <column cols="12">
+            <select class="select" ng-model="room.class">
+                <option value="">Which Class?</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="Ruby">Ruby</option>
+                <option value="Design">Design</option>
+                <option value="iOS">iOS</option>
+                <option value="Java">Java</option>
+                <option value=".NET">.NET</option>
+            </select>
+          </column>
+        </row>
+        <row>
+          <column cols="12">
+            <label>Details <small>(supports markdown)</small></label>
+            <textarea rows="6" ng-model="room.description"></textarea>
+          </colunm>
+        </row>
+        <row>
+          <column cols="12">
+            <button class="btn">Create Room</button>
+          </colunm>
+        </row>
+      </form>
+    </column>
+    <column cols="6">
+      <h3 class="text-centered">Past Events</h3>
 
-  <hr>
+      <div class="alert alert-error text-centered" ng-show="vm.noData">Sorry, there are no attendees for that room.</div>
 
-  <h3 class="text-centered">Past Events</h3>
-
-  <div class="alert alert-error text-centered" ng-show="vm.noData">Sorry, there are no attendees for that room.</div>
-
-  <table class="table-stripped width-7 zeroauto">
-    <tbody>
-      <tr ng-repeat="room in vm.rooms">
-        <td>{{ room.roomID }}</td>
-        <td>{{ room.class | uppercase }}</td>
-        <td>{{ room.date }}</td>
-        <td><a href="/#/room/{{ room.roomID }}">View</a></td>
-        <td><a href="/room/export/{{ room.id }}">Export</td>
-      </tr>
-    </tbody>
-  </table>
+      <table class="table-stripped width-12 zeroauto">
+        <tbody>
+          <tr>
+            <th>Class</th>
+            <th>Date</th>
+            <th colspan="2">Tools</th>
+          </tr>
+          <tr ng-repeat="room in vm.rooms">
+            <td>{{ room.class }}</td>
+            <td>{{ room.date }}</td>
+            <td><a href="/#/room/{{ room.roomID }}">View</a></td>
+            <td><a href="/room/export/{{ room.id }}">Export</td>
+          </tr>
+        </tbody>
+      </table>
+    </column>
+  </row>
 
 </div>

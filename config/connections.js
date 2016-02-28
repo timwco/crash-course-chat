@@ -60,17 +60,17 @@ module.exports.connections = {
   //   adapter: 'sails-mongo'
   // },
 
-  // devMongodbServer: {
-  //   adapter: 'sails-mongo',
-  //   host: 'localhost',
-  //   port: 27017,
-  //   database: 'tiycrashcourse'
-  // },
+  devMongodbServer: {
+    adapter: 'sails-mongo',
+    host: 'localhost',
+    port: 27017,
+    database: 'tiycrashcourse'
+  },
 
-  // prodMongodbServer: {
-  //   adapter: 'sails-mongo',
-  //   url: process.env.MONGOLAB_URI
-  // },
+  prodMongodbServer: {
+    adapter: 'sails-mongo',
+    url: process.env.MONGOLAB_URI
+  },
 
   /***************************************************************************
   *                                                                          *
