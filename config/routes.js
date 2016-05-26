@@ -46,6 +46,7 @@ module.exports.routes = {
   '/room/:id' :  'RoomController.single',
   '/room': 'RoomController.all',
   '/room/export/:id' : 'RoomController.export',
+  'put /room/:id' : 'RoomController.update',
 
   // Guest Register
   'post /register': 'GuestController.create'

@@ -16,6 +16,7 @@ var AdminController = function AdminController(RoomService, AuthService, $stateP
   var vm = this;
 
   vm.createRoom = createRoom;
+  vm.deleteRoom = deleteRoom;
   vm.alert = false;
   vm.noData = false;
 
@@ -42,6 +43,11 @@ var AdminController = function AdminController(RoomService, AuthService, $stateP
       }
     });
 
+    // Load Rooms
+    loadRooms();
+  }
+
+  function loadRooms() {
     RoomService.getRooms().then(function (res) {
       vm.rooms = res.data;
     });
@@ -51,6 +57,14 @@ var AdminController = function AdminController(RoomService, AuthService, $stateP
     RoomService.create(data).then(function (res) {
       $state.go('root.singleRoom', { id: res.data.roomID });
     });
+  }
+
+  function deleteRoom(id) {
+    if (window.confirm("Are you sure? There is NO going back!")) {
+      RoomService.destroy(id).then(function (res) {
+        loadRooms();
+      });
+    }
   }
 };
 
@@ -309,7 +323,11 @@ var RoomService = function RoomService($http) {
   };
 
   this.getRooms = function () {
-    return $http.get('room');
+    return $http.get('/room');
+  };
+
+  this.destroy = function (id) {
+    return $http.put('room/' + id);
   };
 };
 

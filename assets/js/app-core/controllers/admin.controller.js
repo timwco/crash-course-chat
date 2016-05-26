@@ -5,6 +5,7 @@ let AdminController = function(RoomService, AuthService, $stateParams, $state) {
   let vm = this;
 
   vm.createRoom = createRoom;
+  vm.deleteRoom = deleteRoom;
   vm.alert = false;
   vm.noData = false;
 
@@ -27,16 +28,29 @@ let AdminController = function(RoomService, AuthService, $stateParams, $state) {
       }
     });
 
+    // Load Rooms
+    loadRooms();
+
+  }
+
+  function loadRooms () {
     RoomService.getRooms().then( (res) => {
       vm.rooms = res.data;
     });
-
   }
 
   function createRoom (data) {
     RoomService.create(data).then( (res) => {
       $state.go('root.singleRoom', { id: res.data.roomID });
     });
+  }
+
+  function deleteRoom (id) {
+    if (window.confirm("Are you sure? There is NO going back!")) {
+      RoomService.destroy(id).then( (res) => {
+        loadRooms();
+      });
+    }
   }
 
 

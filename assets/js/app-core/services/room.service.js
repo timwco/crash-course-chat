@@ -10,8 +10,12 @@ let RoomService = function($http) {
   };
 
   this.getRooms = () => {
-    return $http.get('room');
+    return $http.get('/room');
   };
+
+  this.destroy = (id) => {
+    return $http.put('room/' + id)
+  }
 
 };
 

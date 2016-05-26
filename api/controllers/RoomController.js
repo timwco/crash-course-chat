@@ -12,6 +12,12 @@ var MarkdownIt  = require('markdown-it'),
 
 module.exports = {
 
+  _config: {
+    actions: false,
+    shortcuts: false,
+    rest: false
+  },
+
 	create: function (req, res) {
 
 		Room.count(function (error, total) {
@@ -31,6 +37,19 @@ module.exports = {
 		});
 
 	},
+
+  update: function (req, res) {
+
+    var rid = req.params('id');
+
+    console.log(rid);
+
+    Room.findOne({ id: rid }).exec( function (err, room) {
+      console.log('err', err);
+      console.log('room', room);
+    });
+
+  },
 
   export: function (req, res) {
 
