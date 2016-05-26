@@ -22,12 +22,12 @@
           <column cols="12">
             <select class="select" ng-model="room.class">
                 <option value="">Which Class?</option>
-                <option value="JavaScript">JavaScript</option>
-                <option value="Ruby">Ruby</option>
-                <option value="Design">Design</option>
-                <option value="iOS">iOS</option>
-                <option value="Java">Java</option>
-                <option value=".NET">.NET</option>
+                <option value="js">JavaScript</option>
+                <option value="rb">Ruby</option>
+                <option value="de">Design</option>
+                <option value="ios">iOS</option>
+                <option value="java">Java</option>
+                <option value="net">.NET</option>
             </select>
           </column>
         </row>
@@ -57,7 +57,7 @@
             <th colspan="3">Tools</th>
           </tr>
           <tr ng-repeat="room in vm.rooms">
-            <td>{{ room.class }}</td>
+            <td>{{ room.class | capname }}</td>
             <td>{{ room.date }}</td>
             <td><a href="/#/room/{{ room.roomID }}">View</a></td>
             <td><a href="/room/export/{{ room.id }}">Export</td>

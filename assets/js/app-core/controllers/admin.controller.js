@@ -35,7 +35,7 @@ let AdminController = function(RoomService, AuthService, $stateParams, $state) {
 
   function loadRooms () {
     RoomService.getRooms().then( (res) => {
-      vm.rooms = res.data;
+      vm.rooms = res.data.reverse();
     });
   }
 

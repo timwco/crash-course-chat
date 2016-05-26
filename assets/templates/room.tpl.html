@@ -2,7 +2,7 @@
 
 <row>
     <column cols="5" class="course-description">
-      <h2>{{ vm.title }} Crash Course</h2>
+      <h2>{{ vm.title | capname }} Crash Course</h2>
       <i>{{ vm.date }}</i>
       <div class="text" ng-bind-html="vm.description"></div>
     </column>
@@ -25,4 +25,10 @@
         </form>
       </div>
     </column>
+</row>
+
+<row>
+  <div class="footer">
+    Brought to you by <a href="http://theironyard.com">The Iron Yard</a>
+  </div>
 </row>
