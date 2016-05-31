@@ -19,6 +19,15 @@ var AdminController = function AdminController(RoomService, AuthService, $stateP
   vm.deleteRoom = deleteRoom;
   vm.alert = false;
   vm.noData = false;
+  vm.onClickTab = onClickTab;
+
+  vm.tabs = [{ title: 'Event Data', url: 'templates/tab-admin.tpl.html' }, { title: 'Create an Event', url: 'templates/tab-new.tpl.html' }];
+
+  vm.tabContent = vm.tabs[0].url;
+
+  vm.isActiveTab = function (tabUrl) {
+    return tabUrl == vm.tabContent;
+  };
 
   activate();
 
@@ -45,6 +54,10 @@ var AdminController = function AdminController(RoomService, AuthService, $stateP
 
     // Load Rooms
     loadRooms();
+  }
+
+  function onClickTab(tab) {
+    vm.tabContent = tab.url;
   }
 
   function loadRooms() {
