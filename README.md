@@ -1,7 +1,5 @@
 ## Crash Course Chat Room
 
-> View live site here - [xcourse.co](http://xcourse.co)
-
 ## Admin
 
 - Click on the `Admin` button in the top right
